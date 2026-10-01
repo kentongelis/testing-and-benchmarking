@@ -1,13 +1,17 @@
 package main
 
 import (
+	"fmt"
 	"testing"
 )
 
 // Simple Test
 func TestCalculate(t *testing.T) {
-	if Calculate(2) != 4 {
-		t.Error("Expected 2 + 2 to equial 4")
+	fmt.Println("Test Calculate")
+	expected := 4
+	result := Calculate(2)
+	if expected != result {
+		t.Error("Failed")
 	}
 }
 
@@ -79,3 +83,31 @@ func FuzzCalculate(f *testing.F) {
 // You can visualisze this by running go test --coverprofile=coverage.out
 
 // Then generate an html file for this by running go tool cover -html=coverage.out
+
+// Simple benchmark test
+func BenchmarkCalculate(b *testing.B) {
+	for b.Loop() {
+		Calculate(2)
+	}
+}
+
+// run go test -bench=
+
+func TestOther(t *testing.T) {
+	fmt.Println("Testing something else")
+	fmt.Println("This shoudn't run with -run=calc")
+}
+
+// If we wanted to run our Calculate tests, run go test -run=Calculate -bench=.
+
+// If you just wanted to run the Benchmark Calculate function that run go test -run=Bench -bench=.
+
+func benchmarkCalculate(input int, b *testing.B) {
+	for b.Loop() {
+		Calculate(input)
+	}
+}
+
+func BenchmarkCalcualte100(b *testing.B)         { benchmarkCalculate(100, b) }
+func BenchmarkCalculateNegative100(b *testing.B) { benchmarkCalculate(-100, b) }
+func BenchmarkCalculateNegative1(b *testing.B)   { benchmarkCalculate(-1, b) }
